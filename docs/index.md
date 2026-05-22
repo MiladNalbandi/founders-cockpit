@@ -16,6 +16,7 @@ You're one person with an idea. You don't have a PM, a designer, a frontend engi
 ## Quick links
 
 - 📖 [**Full tutorial**](tutorial.html) — step-by-step from `git clone` to your first pipeline
+- 📱 [**Live example: GymApp**](examples/gymapp/) — interactive mockup + clickable MVP the org built from one paragraph
 - 🧑‍💻 [Source on GitHub](https://github.com/MiladNalbandi/founders-cockpit)
 - 🐛 [Issues](https://github.com/MiladNalbandi/founders-cockpit/issues)
 - 📜 [GPL-3.0 License](https://github.com/MiladNalbandi/founders-cockpit/blob/main/LICENSE)

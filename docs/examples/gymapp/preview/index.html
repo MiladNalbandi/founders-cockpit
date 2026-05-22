@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GymApp — Clickable MVP Preview</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #C6FF3D;
+    --accent-ink: #0B0D10;
+    --ink: #0B0D10;
+    --paper: #F6F6F1;
+    --muted: #6B7167;
+  }
+  html, body { background: var(--paper); color: var(--ink); }
+  body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+  .font-display { font-family: 'Space Grotesk', 'Inter', ui-sans-serif, sans-serif; letter-spacing: -0.025em; }
+  .phone {
+    width: 380px; height: 780px;
+    border-radius: 44px; background: #fff;
+    box-shadow: 0 30px 60px -20px rgba(11,13,16,0.30), 0 8px 20px -10px rgba(11,13,16,0.15);
+    border: 1px solid rgba(11,13,16,0.06);
+    overflow: hidden; position: relative;
+  }
+  .phone::before {
+    content: ""; position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 28px; background: #0B0D10; border-radius: 999px; z-index: 30;
+  }
+  .screen-pad { padding-top: 58px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  .accent-bg { background: var(--accent); color: var(--accent-ink); }
+  .ink-bg { background: var(--ink); color: #fff; }
+  .ring-ink { box-shadow: inset 0 0 0 1px rgba(11,13,16,0.10); }
+  .num-key {
+    display:flex; align-items:center; justify-content:center;
+    height: 46px; border-radius: 14px; background: #F0F0EA;
+    font-weight: 600; font-size: 20px; color: var(--ink);
+    cursor: pointer; user-select: none; transition: transform .06s ease, background .15s ease;
+  }
+  .num-key:active { transform: scale(0.96); background: #E4E4DC; }
+  .num-key.alt { background: var(--ink); color: #fff; font-size:13px; }
+  .num-key.accent { background: var(--accent); color: var(--accent-ink); font-size:13px; }
+  .divider { height: 1px; background: rgba(11,13,16,0.08); }
+  .label-up { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .glow { box-shadow: 0 12px 30px -10px rgba(198,255,61,0.7); }
+  .scroll-hide::-webkit-scrollbar { display:none; }
+  .nav-item { display:flex; flex-direction:column; align-items:center; gap:2px; font-size: 10px; color: var(--muted); }
+  .nav-item.active { color: var(--ink); }
+  .field-chip { padding: 6px 10px; border-radius: 10px; background: #F0F0EA; text-align: center; cursor: pointer; }
+  .field-chip.active { background: #fff; box-shadow: inset 0 0 0 2px var(--ink); }
+  .pr-pulse { animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+  .toast {
+    position: fixed; left: 50%; bottom: 80px; transform: translateX(-50%);
+    background: var(--ink); color: var(--accent);
+    padding: 10px 16px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    z-index: 60; opacity: 0; transition: opacity .25s, transform .25s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+  .stage { display: none; }
+  .stage.active { display: flex; }
+  .cockpit-footer {
+    position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+    background: rgba(11,13,16,0.92); color: #fff;
+    padding: 8px 14px; border-radius: 999px; font-size: 11px; font-weight: 500;
+    z-index: 50; backdrop-filter: blur(6px);
+    box-shadow: 0 8px 24px -8px rgba(11,13,16,0.5);
+  }
+  .cockpit-footer .dot { color: var(--accent); }
+  .cockpit-footer a { color: var(--accent); text-decoration: underline; cursor: pointer; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<header class="max-w-[1400px] mx-auto px-10 pt-10 pb-6">
+  <div class="flex items-end justify-between gap-6 flex-wrap">
+    <div>
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-9 h-9 rounded-xl ink-bg flex items-center justify-center">
+          <span class="font-display font-black text-[18px]" style="color:var(--accent)">G</span>
+        </div>
+        <span class="font-display text-2xl font-semibold tracking-tight">GymApp</span>
+        <span class="chip ring-ink text-[10px] text-[color:var(--muted)] ml-2">preview · clickable MVP</span>
+      </div>
+      <h1 class="font-display text-4xl font-semibold tracking-tight max-w-2xl leading-[1.05]">
+        Tap through the flow. <span class="bg-[color:var(--accent)] px-1 rounded">No backend needed.</span>
+      </h1>
+      <p class="mt-3 text-[14px] text-[color:var(--muted)] max-w-xl">
+        Landing → log 4 sets of Bench Press → see your summary. RPE drives the next-set load.
+      </p>
+    </div>
+    <button id="resetBtn" class="chip ring-ink text-[color:var(--muted)] hover:bg-white">↻ Reset demo</button>
+  </div>
+</header>
+
+<main class="max-w-[1400px] mx-auto px-10 pb-32 flex justify-center">
+
+  <!-- =================== STAGE 1: LANDING =================== -->
+  <section id="stage-landing" class="stage active flex-col items-center">
+    <div class="phone">
+      <div class="screen-pad px-5 pb-4 h-full flex flex-col">
+        <div class="flex items-center justify-between text-[11px] text-[color:var(--muted)] font-medium px-1">
+          <span>9:41</span><span>100%</span>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg ink-bg flex items-center justify-center">
+              <span class="font-display font-black text-[14px]" style="color:var(--accent)">G</span>
+            </div>
+            <span class="font-display font-semibold">GymApp</span>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-[color:var(--paper)] ring-ink flex items-center justify-center text-[12px] font-semibold">SK</div>
+        </div>
+
+        <div class="mt-5">
+          <p class="label-up">Wednesday · Push day</p>
+          <h2 class="font-display text-[26px] leading-[1.05] font-semibold mt-2">
+            Morning, Sam. <br/>
+            Ready to <span class="bg-[color:var(--accent)] px-1 rounded">push</span>?
+          </h2>
+          <p class="text-[12px] text-[color:var(--muted)] mt-2">Last session 4 days ago. Bench is due for +2.5kg.</p>
+        </div>
+
+        <div class="mt-4 grid grid-cols-3 gap-2">
+          <div class="rounded-2xl ring-ink p-3">
+            <div class="label-up">Streak</div>
+            <div class="font-display text-xl font-semibold mt-1">14<span class="text-[12px] text-[color:var(--muted)] font-medium">d</span></div>
+          </div>
+          <div class="rounded-2xl ring-ink p-3">
+            <div class="label-up">This wk</div>
+            <div class="font-display text-xl font-semibold mt-1">3<span class="text-[12px] text-[color:var(--muted)] font-medium">/4</span></div>
+          </div>
+          <div class="rounded-2xl ring-ink p-3">
+            <div class="label-up">PRs</div>
+            <div class="font-display text-xl font-semibold mt-1">2</div>
+          </div>
+        </div>
+
+        <div class="mt-4 rounded-3xl ink-bg p-5 relative overflow-hidden">
+          <div class="absolute -right-8 -top-8 w-28 h-28 rounded-full" style="background:var(--accent); opacity:.18"></div>
+          <div class="flex items-center justify-between">
+            <span class="chip accent-bg">Today</span>
+            <span class="text-[11px] text-white/60">~ 58 min</span>
+          </div>
+          <h3 class="font-display text-2xl font-semibold mt-3">Push A — Chest & Triceps</h3>
+          <p class="text-[12px] text-white/60 mt-1">6 exercises · 22 sets · PPL Week 5</p>
+          <div class="mt-4 flex items-center gap-2 text-[11px] text-white/80">
+            <span class="px-2 py-1 rounded-full bg-white/10">Bench Press</span>
+            <span class="px-2 py-1 rounded-full bg-white/10">OHP</span>
+            <span class="px-2 py-1 rounded-full bg-white/10">+4</span>
+          </div>
+          <button id="startBtn" class="mt-5 w-full rounded-2xl accent-bg py-3.5 font-semibold text-[15px] glow flex items-center justify-center gap-2 hover:brightness-95">
+            Start workout
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between">
+          <span class="label-up">Your programs</span>
+          <span class="text-[11px] text-[color:var(--muted)] font-medium">See all</span>
+        </div>
+        <div class="mt-2 flex gap-2 overflow-x-auto scroll-hide -mx-1 px-1 pb-1">
+          <div class="min-w-[140px] rounded-2xl ring-ink p-3">
+            <div class="text-[10px] text-[color:var(--muted)]">6-day · Hypertrophy</div>
+            <div class="font-display font-semibold mt-1">PPL</div>
+            <div class="mt-2 h-1.5 rounded bg-black/10"><div class="h-full rounded bg-[color:var(--ink)]" style="width:62%"></div></div>
+            <div class="text-[10px] text-[color:var(--muted)] mt-1.5">Week 5 of 8</div>
+          </div>
+          <div class="min-w-[140px] rounded-2xl ring-ink p-3">
+            <div class="text-[10px] text-[color:var(--muted)]">4-day · Strength</div>
+            <div class="font-display font-semibold mt-1">5/3/1 BBB</div>
+            <div class="mt-2 h-1.5 rounded bg-black/10"><div class="h-full rounded bg-[color:var(--ink)]" style="width:25%"></div></div>
+            <div class="text-[10px] text-[color:var(--muted)] mt-1.5">Paused</div>
+          </div>
+        </div>
+
+        <div class="mt-auto pt-3">
+          <div class="divider mb-2"></div>
+          <div class="grid grid-cols-4 pb-1">
+            <div class="nav-item active"><div class="w-5 h-5 rounded ink-bg"></div>Home</div>
+            <div class="nav-item"><div class="w-5 h-5 rounded ring-ink"></div>Routines</div>
+            <div class="nav-item"><div class="w-5 h-5 rounded ring-ink"></div>History</div>
+            <div class="nav-item"><div class="w-5 h-5 rounded-full ring-ink"></div>Profile</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4 text-center">
+      <div class="font-display font-semibold">1 · Home</div>
+      <div class="text-[12px] text-[color:var(--muted)]">Tap <b>Start workout</b> to begin.</div>
+    </div>
+  </section>
+
+  <!-- =================== STAGE 2: LOGGER =================== -->
+  <section id="stage-logger" class="stage flex-col items-center">
+    <div class="phone">
+      <div class="screen-pad px-5 pb-3 h-full flex flex-col">
+        <div class="flex items-center justify-between text-[11px] text-[color:var(--muted)] font-medium px-1">
+          <span>9:47</span>
+          <span class="flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            Live · auto-saving
+          </span>
+        </div>
+
+        <div class="mt-3 flex items-center justify-between">
+          <button id="backBtn" class="w-9 h-9 rounded-full ring-ink flex items-center justify-center hover:bg-white">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="text-center">
+            <div class="label-up">Push A</div>
+            <div class="font-display font-semibold text-[15px] -mt-0.5" id="elapsedTime">00:00:00</div>
+          </div>
+          <button id="finishBtn" class="px-3 h-9 rounded-full ink-bg text-[12px] font-semibold flex items-center justify-center" style="color:var(--accent)">
+            Finish
+          </button>
+        </div>
+
+        <div class="mt-3 flex items-center gap-1">
+          <span class="flex-1 h-1 rounded" style="background:var(--accent)"></span>
+          <span class="flex-1 h-1 rounded bg-black/10"></span>
+          <span class="flex-1 h-1 rounded bg-black/10"></span>
+          <span class="flex-1 h-1 rounded bg-black/10"></span>
+          <span class="flex-1 h-1 rounded bg-black/10"></span>
+          <span class="flex-1 h-1 rounded bg-black/10"></span>
+        </div>
+
+        <div class="mt-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="label-up">Exercise 1 of 6</div>
+              <h3 class="font-display text-[22px] font-semibold leading-tight mt-0.5">Bench Press</h3>
+            </div>
+            <span class="chip accent-bg pr-pulse">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1l1.2 2.5L9 4l-2 2 .5 3L5 7.5 2.5 9 3 6 1 4l2.8-.5L5 1z" fill="currentColor"/></svg>
+              PR likely
+            </span>
+          </div>
+          <p class="text-[12px] text-[color:var(--muted)] mt-1">Target: 4 × 5 @ RPE 8 · 2:30 rest</p>
+        </div>
+
+        <div class="mt-2 rounded-2xl p-2.5 flex items-center gap-3" style="background:rgba(198,255,61,0.28)">
+          <div class="w-8 h-8 rounded-lg accent-bg flex items-center justify-center">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v3M7 10v3M1 7h3M10 7h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <div class="flex-1">
+            <div class="text-[10px] font-semibold tracking-wide">SUGGESTED · NEXT SET</div>
+            <div class="text-[12px]"><span class="font-semibold" id="suggestedWeight">100.0 kg × 5</span> @ RPE 8</div>
+          </div>
+        </div>
+
+        <div class="mt-2 space-y-1" id="setsList"><!-- rows injected --></div>
+
+        <div class="mt-2 grid grid-cols-3 gap-1.5" id="fieldChips">
+          <div class="text-center">
+            <div class="label-up">Weight</div>
+            <div class="field-chip mt-1 font-display text-[15px] font-semibold" data-field="weight"></div>
+          </div>
+          <div class="text-center">
+            <div class="label-up">Reps</div>
+            <div class="field-chip mt-1 font-display text-[15px] font-semibold" data-field="reps"></div>
+          </div>
+          <div class="text-center">
+            <div class="label-up">RPE</div>
+            <div class="field-chip active mt-1 font-display text-[15px] font-semibold" data-field="rpe"></div>
+          </div>
+        </div>
+
+        <div class="mt-2 grid grid-cols-4 gap-1.5" id="numpad">
+          <div class="num-key" data-key="1">1</div><div class="num-key" data-key="2">2</div><div class="num-key" data-key="3">3</div>
+          <div class="num-key alt" data-key="bksp">⌫</div>
+          <div class="num-key" data-key="4">4</div><div class="num-key" data-key="5">5</div><div class="num-key" data-key="6">6</div>
+          <div class="num-key alt" data-key="dot">.</div>
+          <div class="num-key" data-key="7">7</div><div class="num-key" data-key="8">8</div><div class="num-key" data-key="9">9</div>
+          <div class="num-key accent" data-key="save">✓ Save</div>
+          <div class="num-key" data-key="0" style="grid-column: span 3">0</div>
+          <div class="num-key" data-key="rest" style="font-size:11px">Rest 2:30</div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4 text-center">
+      <div class="font-display font-semibold">2 · Logger</div>
+      <div class="text-[12px] text-[color:var(--muted)]">Tap a chip to focus, numpad to enter, <b>✓ Save</b> to log the set.</div>
+    </div>
+  </section>
+
+  <!-- =================== STAGE 3: SUMMARY =================== -->
+  <section id="stage-summary" class="stage flex-col items-center">
+    <div class="phone">
+      <div class="screen-pad px-5 pb-4 h-full flex flex-col">
+        <div class="flex items-center justify-between text-[11px] text-[color:var(--muted)] font-medium px-1">
+          <span>10:46</span>
+          <span class="flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            Synced
+          </span>
+        </div>
+
+        <div class="mt-4 text-center">
+          <div class="inline-flex items-center gap-1.5 chip accent-bg">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1l1.2 2.5L9 4l-2 2 .5 3L5 7.5 2.5 9 3 6 1 4l2.8-.5L5 1z" fill="currentColor"/></svg>
+            <span id="prCount">1 new PR</span>
+          </div>
+          <h2 class="font-display text-[28px] font-semibold leading-[1.05] mt-3 tracking-tight">
+            Workout <br/>
+            <span class="bg-[color:var(--accent)] px-1 rounded">complete.</span>
+          </h2>
+          <p class="text-[12px] text-[color:var(--muted)] mt-2" id="summaryMeta">Push A · 4 sets · Bench Press</p>
+        </div>
+
+        <div class="mt-5 grid grid-cols-3 gap-2">
+          <div class="rounded-2xl ink-bg p-3 text-white">
+            <div class="text-[9px] font-semibold tracking-wider uppercase" style="color:var(--accent)">Volume</div>
+            <div class="font-display text-lg font-semibold mt-1"><span id="volKg">0</span><span class="text-[10px] text-white/60 ml-0.5">kg</span></div>
+            <div class="text-[10px] text-white/60 mt-0.5">across <span id="volSets">0</span> sets</div>
+          </div>
+          <div class="rounded-2xl ring-ink p-3">
+            <div class="label-up">Sets</div>
+            <div class="font-display text-lg font-semibold mt-1" id="setsCount">0</div>
+            <div class="text-[10px] text-[color:var(--muted)] mt-0.5">all logged</div>
+          </div>
+          <div class="rounded-2xl ring-ink p-3">
+            <div class="label-up">Avg RPE</div>
+            <div class="font-display text-lg font-semibold mt-1" id="avgRpe">0</div>
+            <div class="text-[10px] text-[color:var(--muted)] mt-0.5" id="rpeRange">In range</div>
+          </div>
+        </div>
+
+        <div class="mt-4 rounded-2xl ring-ink p-3">
+          <div class="flex items-center justify-between">
+            <span class="label-up">Personal records</span>
+            <span class="text-[10px] text-[color:var(--muted)]" id="prSlot">1</span>
+          </div>
+          <div class="mt-2 space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg accent-bg flex items-center justify-center text-[11px] font-bold">5RM</span>
+                <div>
+                  <div class="text-[13px] font-semibold">Bench Press</div>
+                  <div class="text-[10px] text-[color:var(--muted)]">was 97.5kg</div>
+                </div>
+              </div>
+              <div class="font-display font-semibold"><span id="topSetWeight">100</span><span class="text-[10px] text-[color:var(--muted)] ml-0.5">kg</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 rounded-2xl ring-ink p-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="label-up">Bench Press · e1RM</div>
+              <div class="font-display text-lg font-semibold mt-0.5"><span id="e1rm">116.7</span><span class="text-[11px] text-[color:var(--muted)] ml-0.5">kg</span> <span class="text-[11px] font-medium text-emerald-600 ml-1">▲ 3.2</span></div>
+            </div>
+            <span class="text-[10px] text-[color:var(--muted)]">last 8</span>
+          </div>
+          <svg viewBox="0 0 280 70" class="mt-1 w-full" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#C6FF3D" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#C6FF3D" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M2 55 L40 48 L75 50 L110 40 L145 36 L180 30 L215 24 L260 12" fill="none" stroke="#0B0D10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 55 L40 48 L75 50 L110 40 L145 36 L180 30 L215 24 L260 12 L260 70 L2 70 Z" fill="url(#g)" stroke="none"/>
+            <circle cx="260" cy="12" r="3.5" fill="#0B0D10"/>
+            <circle cx="260" cy="12" r="6" fill="#0B0D10" fill-opacity="0.15"/>
+          </svg>
+        </div>
+
+        <div class="mt-3 rounded-2xl p-3" style="background:var(--ink); color:#fff">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-[9px] font-semibold tracking-wider uppercase" style="color:var(--accent)">Next · Friday</div>
+              <div class="font-display font-semibold mt-0.5 text-[14px]">Pull A — Back & Biceps</div>
+            </div>
+            <span class="text-[11px] text-white/60">in 2 days</span>
+          </div>
+        </div>
+
+        <div class="mt-auto pt-3 grid grid-cols-2 gap-2">
+          <button id="shareBtn" class="rounded-2xl ring-ink py-3 font-semibold text-[13px] bg-white hover:bg-[color:var(--paper)]">Share</button>
+          <button id="doneBtn" class="rounded-2xl accent-bg py-3 font-semibold text-[13px] hover:brightness-95">Done</button>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4 text-center">
+      <div class="font-display font-semibold">3 · Summary</div>
+      <div class="text-[12px] text-[color:var(--muted)]">Volume, RPE, PRs — instantly.</div>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast">Saved</div>
+
+<div class="cockpit-footer">
+  Built by the Cockpit <span class="dot">·</span> <a id="brokenLink">click anywhere broken to file a ticket</a>
+</div>
+
+<script>
+  // ---------- demo state ----------
+  const STATE = {
+    activeField: 'rpe',
+    sets: [
+      { weight: 100.0, reps: 5, rpe: null, logged: false },
+      { weight: null,  reps: null, rpe: null, logged: false },
+      { weight: null,  reps: null, rpe: null, logged: false },
+      { weight: null,  reps: null, rpe: null, logged: false },
+    ],
+    buffer: '',
+    activeSetIdx: 0,
+    startedAt: null,
+  };
+
+  const stages = {
+    landing: document.getElementById('stage-landing'),
+    logger:  document.getElementById('stage-logger'),
+    summary: document.getElementById('stage-summary'),
+  };
+  function go(stage) {
+    Object.values(stages).forEach(s => s.classList.remove('active'));
+    stages[stage].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  const toastEl = document.getElementById('toast');
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toastEl.classList.remove('show'), 1500);
+  }
+
+  // ---------- overload rule (from ticket) ----------
+  // rpe<=7 → +2.5kg ; rpe==8 → same ; rpe>=9 → -2.5kg
+  function nextPrescribedLoad(prevWeight, rpe) {
+    if (rpe <= 7) return prevWeight + 2.5;
+    if (rpe === 8) return prevWeight;
+    return prevWeight - 2.5;
+  }
+
+  function fmtWeight(w) { return w == null ? '—' : (Math.round(w * 10) / 10).toFixed(1); }
+
+  function renderSets() {
+    const list = document.getElementById('setsList');
+    list.innerHTML = '';
+    STATE.sets.forEach((s, i) => {
+      const isActive = i === STATE.activeSetIdx && !s.logged;
+      const row = document.createElement('div');
+      row.className = 'grid grid-cols-12 items-center rounded-xl px-2 py-1.5 ' +
+        (s.logged ? 'bg-[color:var(--paper)]' : (isActive ? 'bg-white' : 'bg-[color:var(--paper)] opacity-60'));
+      if (isActive) row.style.boxShadow = 'inset 0 0 0 2px var(--ink)';
+      const prev = i === 0 ? '97.5 × 5' : (STATE.sets[i-1].logged ? `${fmtWeight(STATE.sets[i-1].weight)} × ${STATE.sets[i-1].reps}` : '—');
+      row.innerHTML = `
+        <div class="col-span-1 font-display font-semibold text-[13px]">${i+1}</div>
+        <div class="col-span-3 text-[10px] text-[color:var(--muted)]">${prev}</div>
+        <div class="col-span-3 text-center font-semibold text-[13px] ${s.weight==null?'text-[color:var(--muted)]':''}">${fmtWeight(s.weight)}<span class="text-[9px] text-[color:var(--muted)] ml-0.5">kg</span></div>
+        <div class="col-span-2 text-center font-semibold text-[13px] ${s.reps==null?'text-[color:var(--muted)]':''}">${s.reps ?? '—'}</div>
+        <div class="col-span-2 text-center font-semibold text-[13px] ${s.rpe==null?'text-[color:var(--muted)]':''}">${s.rpe ?? '—'}</div>
+        <div class="col-span-1 text-right">
+          ${s.logged
+            ? '<span class="inline-flex w-5 h-5 rounded-full ink-bg items-center justify-center text-[10px]" style="color:var(--accent)">✓</span>'
+            : '<span class="inline-flex w-5 h-5 rounded-full ring-ink items-center justify-center text-[10px]">·</span>'}
+        </div>`;
+      list.appendChild(row);
+    });
+  }
+
+  function renderActiveFields() {
+    const set = STATE.sets[STATE.activeSetIdx];
+    document.querySelectorAll('.field-chip').forEach(el => {
+      const f = el.dataset.field;
+      el.classList.toggle('active', f === STATE.activeField);
+      let v;
+      if (set && set[f] != null) v = set[f];
+      if (STATE.activeField === f && STATE.buffer !== '') v = STATE.buffer;
+
+      const isEmpty = (v === undefined || v === null || v === '');
+      let display;
+      if (isEmpty) display = '<span class="text-[color:var(--muted)]">—</span>';
+      else if (f === 'weight') display = `${typeof v === 'number' ? fmtWeight(v) : v}<span class="text-[10px] text-[color:var(--muted)] ml-0.5">kg</span>`;
+      else display = `${v}`;
+      el.innerHTML = display;
+    });
+
+    // suggested next-set badge: use the most recent logged set
+    const lastLogged = [...STATE.sets].reverse().find(s => s.logged);
+    if (lastLogged) {
+      const next = nextPrescribedLoad(lastLogged.weight, lastLogged.rpe);
+      document.getElementById('suggestedWeight').textContent = `${fmtWeight(next)} kg × ${lastLogged.reps}`;
+    } else {
+      document.getElementById('suggestedWeight').textContent = '100.0 kg × 5';
+    }
+  }
+
+  function pressKey(key) {
+    const set = STATE.sets[STATE.activeSetIdx];
+    if (!set) return;
+    if (set.logged && key !== 'rest') return;
+
+    if (key === 'save') { commitBuffer(); saveActiveSet(); return; }
+    if (key === 'rest') { toast('⏱ Rest timer started · 2:30'); return; }
+    if (key === 'bksp') {
+      if (STATE.buffer.length > 0) STATE.buffer = STATE.buffer.slice(0, -1);
+      else set[STATE.activeField] = null;
+      renderActiveFields(); return;
+    }
+    if (key === 'dot') {
+      if (STATE.activeField !== 'weight') return;
+      if (!STATE.buffer.includes('.')) STATE.buffer += (STATE.buffer === '' ? '0.' : '.');
+      renderActiveFields(); return;
+    }
+    // digit
+    if (STATE.activeField === 'rpe' && STATE.buffer.length >= 2) return;
+    if (STATE.activeField === 'reps' && STATE.buffer.length >= 3) return;
+    STATE.buffer += key;
+    renderActiveFields();
+  }
+
+  function commitBuffer() {
+    if (STATE.buffer === '') return;
+    const set = STATE.sets[STATE.activeSetIdx];
+    let v = parseFloat(STATE.buffer);
+    if (!isNaN(v)) {
+      if (STATE.activeField !== 'weight') v = Math.round(v);
+      set[STATE.activeField] = v;
+    }
+    STATE.buffer = '';
+  }
+
+  function saveActiveSet() {
+    const set = STATE.sets[STATE.activeSetIdx];
+    if (set.weight == null || set.reps == null || set.rpe == null) {
+      toast('Need weight, reps & RPE');
+      if (set.weight == null) focusField('weight');
+      else if (set.reps == null) focusField('reps');
+      else focusField('rpe');
+      return;
+    }
+    if (set.rpe < 5 || set.rpe > 10) { toast('RPE should be 5–10'); return; }
+    set.logged = true;
+    toast(`✓ Set ${STATE.activeSetIdx + 1} of ${STATE.sets.length} saved`);
+
+    const nextIdx = STATE.activeSetIdx + 1;
+    if (nextIdx < STATE.sets.length) {
+      const suggestedW = nextPrescribedLoad(set.weight, set.rpe);
+      STATE.sets[nextIdx].weight = suggestedW;
+      STATE.sets[nextIdx].reps = set.reps;
+      STATE.activeSetIdx = nextIdx;
+      STATE.activeField = 'rpe';
+      STATE.buffer = '';
+    } else {
+      document.getElementById('finishBtn').classList.add('pr-pulse');
+      toast('All sets logged — tap Finish');
+    }
+    renderSets();
+    renderActiveFields();
+  }
+
+  function focusField(f) {
+    commitBuffer();
+    STATE.activeField = f;
+    STATE.buffer = '';
+    renderActiveFields();
+  }
+
+  // ---------- summary ----------
+  function showSummary() {
+    let vol = 0, rpeSum = 0, top = 0;
+    STATE.sets.forEach(s => {
+      vol += s.weight * s.reps;
+      rpeSum += s.rpe;
+      if (s.weight > top) top = s.weight;
+    });
+    const avg = rpeSum / STATE.sets.length;
+    document.getElementById('volKg').textContent = Math.round(vol).toLocaleString();
+    document.getElementById('volSets').textContent = STATE.sets.length;
+    document.getElementById('setsCount').textContent = STATE.sets.length;
+    document.getElementById('avgRpe').textContent = avg.toFixed(1);
+    document.getElementById('topSetWeight').textContent = fmtWeight(top);
+    const topSet = STATE.sets.reduce((a, b) => b.weight > a.weight ? b : a);
+    const e1rm = topSet.weight * (1 + topSet.reps / 30); // Epley
+    document.getElementById('e1rm').textContent = e1rm.toFixed(1);
+    document.getElementById('summaryMeta').textContent = `Push A · ${STATE.sets.length} sets · Bench Press`;
+    const isPR = top >= 100;
+    document.getElementById('prCount').textContent = isPR ? '1 new PR' : 'Nice work';
+    document.getElementById('prSlot').textContent = isPR ? '1' : '0';
+    document.getElementById('rpeRange').textContent =
+      avg >= 7 && avg <= 9 ? 'In range' : (avg < 7 ? 'Easy — push' : 'High — recover');
+    go('summary');
+  }
+
+  // ---------- wire events ----------
+  document.getElementById('startBtn').addEventListener('click', () => {
+    STATE.startedAt = Date.now();
+    go('logger');
+    renderSets();
+    renderActiveFields();
+    if (!STATE._timer) {
+      STATE._timer = setInterval(() => {
+        if (!STATE.startedAt) return;
+        const s = Math.floor((Date.now() - STATE.startedAt) / 1000);
+        const hh = String(Math.floor(s/3600)).padStart(2,'0');
+        const mm = String(Math.floor((s%3600)/60)).padStart(2,'0');
+        const ss = String(s%60).padStart(2,'0');
+        const el = document.getElementById('elapsedTime');
+        if (el) el.textContent = `${hh}:${mm}:${ss}`;
+      }, 1000);
+    }
+  });
+
+  document.getElementById('backBtn').addEventListener('click', () => go('landing'));
+
+  document.getElementById('finishBtn').addEventListener('click', () => {
+    if (!STATE.sets.every(s => s.logged)) {
+      toast(`Log all ${STATE.sets.length} sets first`);
+      return;
+    }
+    showSummary();
+  });
+
+  document.getElementById('doneBtn').addEventListener('click', () => location.reload());
+  document.getElementById('shareBtn').addEventListener('click', () => toast('🔗 Link copied'));
+  document.getElementById('resetBtn').addEventListener('click', () => location.reload());
+  document.getElementById('brokenLink').addEventListener('click', () => toast('🎟 Ticket filed — Cockpit notified'));
+
+  document.getElementById('numpad').addEventListener('click', (e) => {
+    const k = e.target.closest('.num-key');
+    if (!k) return;
+    pressKey(k.dataset.key);
+  });
+
+  document.getElementById('fieldChips').addEventListener('click', (e) => {
+    const c = e.target.closest('.field-chip');
+    if (!c) return;
+    focusField(c.dataset.field);
+    renderSets();
+  });
+
+  // initial render
+  renderSets();
+  renderActiveFields();
+</script>
+
+</body>
+</html>

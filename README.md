@@ -11,6 +11,8 @@ A Claude Desktop–style application for solo founders. Spin up a startup projec
 ![Cockpit pipeline view](docs/assets/screenshots/04-cockpit-pipeline.png)
 
 > 📖 **[Full step-by-step tutorial with screenshots →](https://miladnalbandi.github.io/founders-cockpit/tutorial.html)**
+>
+> 📱 **[See a real example: GymApp design + clickable MVP →](https://miladnalbandi.github.io/founders-cockpit/examples/gymapp/)** — every file written by a Claude agent from one paragraph of input.
 
 ```
 ┌──────────────────────────────────────────────────────────┐

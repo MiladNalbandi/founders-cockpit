@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GymApp — Mockup</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --accent: #C6FF3D;
+    --accent-ink: #0B0F0A;
+    --ink: #0B0F0A;
+    --paper: #F6F6F2;
+    --muted: #6B7167;
+  }
+  html, body { background: var(--paper); color: var(--ink); }
+  body { font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .font-display { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.035em; }
+  .phone {
+    width: 380px;
+    height: 780px;
+    border-radius: 44px;
+    background: #fff;
+    box-shadow: 0 30px 60px -20px rgba(11,15,10,0.25), 0 8px 20px -10px rgba(11,15,10,0.15);
+    border: 1px solid rgba(11,15,10,0.06);
+    overflow: hidden;
+    position: relative;
+  }
+  .phone::before {
+    content: "";
+    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 28px; background: #0B0F0A; border-radius: 999px; z-index: 30;
+  }
+  .screen-pad { padding-top: 58px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  .accent-bg { background: var(--accent); color: var(--accent-ink); }
+  .ink-bg { background: var(--ink); color: #fff; }
+  .ring-ink { box-shadow: inset 0 0 0 1px rgba(11,15,10,0.08); }
+  .num-key {
+    display:flex; align-items:center; justify-content:center;
+    height: 48px; border-radius: 14px; background: #F0F0EA;
+    font-weight: 600; font-size: 20px; color: var(--ink);
+  }
+  .num-key.alt { background: var(--ink); color: #fff; font-size:13px; }
+  .num-key.accent { background: var(--accent); color: var(--accent-ink); font-size:13px; }
+  .divider { height: 1px; background: rgba(11,15,10,0.08); }
+  .nav-item { display:flex; flex-direction:column; align-items:center; gap:2px; font-size: 10px; color: var(--muted); }
+  .nav-item.active { color: var(--ink); }
+  .label-up { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .bar { background: rgba(11,15,10,0.10); border-radius: 4px; }
+  .bar > span { display:block; height: 100%; background: var(--ink); border-radius: 4px; }
+  .scroll-hide::-webkit-scrollbar { display:none; }
+  .glow { box-shadow: 0 12px 30px -10px rgba(198,255,61,0.7); }
+</style>
+</head>
+<body class="min-h-screen">
+
+  <header class="max-w-[1400px] mx-auto px-10 pt-14 pb-8">
+    <div class="flex items-end justify-between gap-6 flex-wrap">
+      <div>
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-9 h-9 rounded-xl ink-bg flex items-center justify-center">
+            <span class="font-display font-black text-[18px]" style="color:var(--accent)">G</span>
+          </div>
+          <span class="font-display text-2xl font-semibold tracking-tight">GymApp</span>
+          <span class="chip ring-ink text-[10px] text-[color:var(--muted)] ml-2">v0.1 · mockup</span>
+        </div>
+        <h1 class="font-display text-5xl font-semibold tracking-tight max-w-2xl leading-[1.05]">
+          The fastest set-logger on the web.
+        </h1>
+        <p class="mt-3 text-[15px] text-[color:var(--muted)] max-w-xl">
+          Three screens of the MVP: home, mid-workout logger, and post-workout summary.
+        </p>
+      </div>
+      <div class="hidden md:flex items-center gap-2">
+        <span class="chip ring-ink text-[color:var(--muted)]">PWA</span>
+        <span class="chip ring-ink text-[color:var(--muted)]">Offline-first</span>
+        <span class="chip accent-bg">Mobile-first</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-[1400px] mx-auto px-10 pb-24">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 place-items-start justify-items-center">
+
+      <!-- SCREEN 1 — HOME -->
+      <section class="w-full flex flex-col items-center">
+        <div class="phone">
+          <div class="screen-pad px-5 pb-4 h-full flex flex-col">
+            <div class="flex items-center justify-between text-[11px] text-[color:var(--muted)] font-medium px-1">
+              <span>9:41</span>
+              <span>100%</span>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg ink-bg flex items-center justify-center">
+                  <span class="font-display font-black text-[14px]" style="color:var(--accent)">G</span>
+                </div>
+                <span class="font-display font-semibold">GymApp</span>
+              </div>
+              <div class="w-8 h-8 rounded-full bg-[color:var(--paper)] ring-ink flex items-center justify-center text-[12px] font-semibold">SK</div>
+            </div>
+
+            <div class="mt-5">
+              <p class="label-up">Wednesday · Push day</p>
+              <h2 class="font-display text-[26px] leading-[1.05] font-semibold mt-2">
+                Morning, Sam. <br/>
+                Ready to <span class="bg-[color:var(--accent)] px-1 rounded">push</span>?
+              </h2>
+              <p class="text-[12px] text-[color:var(--muted)] mt-2">Last session 4 days ago. Bench is due for +2.5kg.</p>
+            </div>
+
+            <div class="mt-4 grid grid-cols-3 gap-2">
+              <div class="rounded-2xl ring-ink p-3">
+                <div class="label-up">Streak</div>
+                <div class="font-display text-xl font-semibold mt-1">14<span class="text-[12px] text-[color:var(--muted)] font-medium">d</span></div>
+              </div>
+              <div class="rounded-2xl ring-ink p-3">
+                <div class="label-up">This wk</div>
+                <div class="font-display text-xl font-semibold mt-1">3<span class="text-[12px] text-[color:var(--muted)] font-medium">/4</span></div>
+              </div>
+              <div class="rounded-2xl ring-ink p-3">
+                <div class="label-up">PRs</div>
+                <div class="font-display text-xl font-semibold mt-1">2</div>
+              </div>
+            </div>
+
+            <div class="mt-4 rounded-3xl ink-bg p-5 relative overflow-hidden">
+              <div class="absolute -right-8 -top-8 w-28 h-28 rounded-full" style="background:var(--accent); opacity:.18"></div>
+              <div class="flex items-center justify-between">
+                <span class="chip accent-bg">Today</span>
+                <span class="text-[11px] text-white/60">~ 58 min</span>
+              </div>
+              <h3 class="font-display text-2xl font-semibold mt-3">Push A — Chest & Triceps</h3>
+              <p class="text-[12px] text-white/60 mt-1">6 exercises · 22 sets · PPL Week 5</p>
+              <div class="mt-4 flex items-center gap-2 text-[11px] text-white/80">
+                <span class="px-2 py-1 rounded-full bg-white/10">Bench Press</span>
+                <span class="px-2 py-1 rounded-full bg-white/10">OHP</span>
+                <span class="px-2 py-1 rounded-full bg-white/10">+4</span>
+              </div>
+              <button class="mt-5 w-full rounded-2xl accent-bg py-3.5 font-semibold text-[15px] glow flex items-center justify-center gap-2">
+                Start workout
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between">
+              <span class="label-up">Your programs</span>
+              <span class="text-[11px] text-[color:var(--muted)] font-medium">See all</span>
+            </div>
+            <div class="mt-2 flex gap-2 overflow-x-auto scroll-hide -mx-1 px-1 pb-1">
+              <div class="min-w-[140px] rounded-2xl ring-ink p-3">
+                <div class="text-[10px] text-[color:var(--muted)]">6-day · Hypertrophy</div>
+                <div class="font-display font-semibold mt-1">PPL</div>
+                <div class="mt-2 bar h-1.5"><span style="width:62%"></span></div>
+                <div class="text-[10px] text-[color:var(--muted)] mt-1.5">Week 5 of 8</div>
+              </div>
+              <div class="min-w-[140px] rounded-2xl ring-ink p-3">
+                <div class="text-[10px] text-[color:var(--muted)]">4-day · Strength</div>
+                <div class="font-display font-semibold mt-1">5/3/1 BBB</div>
+                <div class="mt-2 bar h-1.5"><span style="width:25%"></span></div>
+                <div class="text-[10px] text-[color:var(--muted)] mt-1.5">Paused</div>
+              </div>
+              <div class="min-w-[140px] rounded-2xl p-3 border-2 border-dashed flex flex-col justify-center" style="border-color:rgba(11,15,10,0.12);">
+                <div class="text-[10px] text-[color:var(--muted)]">Custom</div>
+                <div class="font-display font-semibold mt-1">+ New routine</div>
+              </div>
+            </div>
+
+            <div class="mt-auto pt-3">
+              <div class="divider mb-2"></div>
+              <div class="grid grid-cols-4 pb-1">
+                <div class="nav-item active"><div class="w-5 h-5 rounded ink-bg"></div>Home</div>
+                <div class="nav-item"><div class="w-5 h-5 rounded ring-ink"></div>Routines</div>
+                <div class="nav-item"><div class="w-5 h-5 rounded ring-ink"></div>History</div>
+                <div class="nav-item"><div class="w-5 h-5 rounded-full ring-ink"></div>Profile</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <div class="font-display font-semibold">1 · Home</div>
+          <div class="text-[12px] text-[color:var(--muted)]">Start a workout in one tap.</div>
+        </div>
+      </section>
+
+      <!-- SCREEN 2 — LOGGER -->
+      <section class="w-full flex flex-col items-center">
+        <div class="phone">
+          <div class="screen-pad px-5 pb-4 h-full flex flex-col">
+            <div class="flex items-center justify-between text-[11px] text-[color:var(--muted)] font-medium px-1">
+              <span>9:47</span>
+              <span class="flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                Offline · queued
+              </span>
+            </div>
+
+            <div class="mt-3 flex items-center justify-between">
+              <button class="w-9 h-9 rounded-full ring-ink flex items-center justify-center">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="text-center">
+                <div class="label-up">Push A</div>
+                <div class="font-display font-semibold text-[15px] -mt-0.5">00:24:18</div>
+              </div>
+              <button class="w-9 h-9 rounded-full ring-ink flex items-center justify-center text-[18px] font-light">⋯</button>
+            </div>
+
+            <div class="mt-3 flex items-center gap-1">
+              <span class="flex-1 h-1 rounded bg-[color:var(--ink)]"></span>
+              <span class="flex-1 h-1 rounded bg-[color:var(--ink)]"></span>
+              <span class="flex-1 h-1 rounded" style="background:var(--accent)"></span>
+              <span class="flex-1 h-1 rounded bg-[color:var(--ink)]/15"></span>
+              <span class="flex-1 h-1 rounded bg-[color:var(--ink)]/15"></span>
+              <span class="flex-1 h-1 rounded bg-[color:var(--ink)]/15"></span>
+            </div>
+
+            <div class="mt-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="label-up">Exercise 3 of 6</div>
+                  <h3 class="font-display text-[22px] font-semibold leading-tight mt-0.5">Incline DB Press</h3>
+                </div>
+                <span class="chip accent-bg">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1l1.2 2.5L9 4l-2 2 .5 3L5 7.5 2.5 9 3 6 1 4l2.8-.5L5 1z" fill="currentColor"/></svg>
+                  PR likely
+                </span>
+              </div>
+              <p class="text-[12px] text-[color:var(--muted)] mt-1">Target: 3 × 8–10 @ RPE 8 · 90s rest</p>
+            </div>
+
+            <div class="mt-3 rounded-2xl p-3 flex items-center gap-3" style="background:rgba(198,255,61,0.28)">
+              <div class="w-8 h-8 rounded-lg accent-bg flex items-center justify-center">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v3M7 10v3M1 7h3M10 7h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </div>
+              <div class="flex-1">
+                <div class="text-[10px] font-semibold tracking-wide">SUGGESTED · NEXT SET</div>
+                <div class="text-[12px]"><span class="font-semibold">32.5 kg × 9</span> @ RPE 8 — last session +1 rep</div>
+              </div>
+            </div>
+
+            <div class="mt-4 space-y-2">
+              <div class="grid grid-cols-12 items-center text-[9px] text-[color:var(--muted)] font-semibold uppercase tracking-wider px-2">
+                <div class="col-span-1">Set</div>
+                <div class="col-span-3">Previous</div>
+                <div class="col-span-3 text-center">Weight</div>
+                <div class="col-span-2 text-center">Reps</div>
+                <div class="col-span-2 text-center">RPE</div>
+                <div class="col-span-1"></div>
+              </div>
+
+              <div class="grid grid-cols-12 items-center bg-[color:var(--paper)] rounded-xl px-2 py-2">
+                <div class="col-span-1 font-display font-semibold text-[13px]">1</div>
+                <div class="col-span-3 text-[11px] text-[color:var(--muted)]">30 × 10</div>
+                <div class="col-span-3 text-center font-semibold text-[13px]">32.5</div>
+                <div class="col-span-2 text-center font-semibold text-[13px]">10</div>
+                <div class="col-span-2 text-center font-semibold text-[13px]">7</div>
+                <div class="col-span-1 text-right">
+                  <span class="inline-flex w-5 h-5 rounded-full ink-bg items-center justify-center text-[10px]" style="color:var(--accent)">✓</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-12 items-center bg-[color:var(--paper)] rounded-xl px-2 py-2">
+                <div class="col-span-1 font-display font-semibold text-[13px]">2</div>
+                <div class="col-span-3 text-[11px] text-[color:var(--muted)]">30 × 9</div>
+                <div class="col-span-3 text-center font-semibold text-[13px]">32.5</div>
+                <div class="col-span-2 text-center font-semibold text-[13px]">9</div>
+                <div class="col-span-2 text-center font-semibold text-[13px]">8</div>
+                <div class="col-span-1 text-right">
+                  <span class="inline-flex w-5 h-5 rounded-full ink-bg items-center justify-center text-[10px]" style="color:var(--accent)">✓</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-12 items-center rounded-xl px-2 py-2 bg-white" style="box-shadow: inset 0 0 0 2px var(--ink);">
+                <div class="col-span-1 font-display font-semibold text-[13px]">3</div>
+                <div class="col-span-3 text-[11px] text-[color:var(--muted)]">30 × 8</div>
+                <div class="col-span-3 text-center">
+                  <div class="font-display font-semibold text-[15px]">32.5<span class="text-[10px] text-[color:var(--muted)] font-medium ml-0.5">kg</span></div>
+                </div>
+                <div class="col-span-2 text-center">
+                  <div class="font-display font-semibold text-[15px]">9</div>
+                </div>
+                <div class="col-span-2 text-center">
+                  <div class="font-display font-semibold text-[15px] text-[color:var(--muted)]">—</div>
+                </div>
+                <div class="col-span-1 text-right">
+                  <span class="inline-flex w-5 h-5 rounded-full ring-ink items-center justify-center text-[10px]">·</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3 grid grid-cols-4 gap-1.5">
+              <div class="num-key">1</div><div class="num-key">2</div><div class="num-key">3</div>
+              <div class="num-key alt">Reps</div>
+              <div class="num-key">4</div><div class="num-key">5</div><div class="num-key">6</div>
+              <div class="num-key alt">RPE</div>
+              <div class="num-key">7</div><div class="num-key">8</div><div class="num-key">9</div>
+              <div class="num-key accent">Save</div>
+              <div class="num-key">.</div><div class="num-key">0</div><div class="num-key">⌫</div>
+              <div class="num-key" style="font-size:11px">Rest 90s</div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <div class="font-display font-semibold">2 · Logger</div>
+          <div class="text-[12px] text-[color:var(--muted)]">Thumb-zone numpad. Load auto-fills.</div>
+        </div>
+      </section>
+
+      <!-- SCREEN 3 — SUMMARY -->
+      <section class="w-full flex flex-col items-center">
+        <div class="phone">
+          <div class="screen-pad px-5 pb-4 h-full flex flex-col">
+            <div class="flex items-center justify-between text-[11px] text-[color:var(--muted)] font-medium px-1">
+              <span>10:46</span>
+              <span class="flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                Synced
+              </span>
+            </div>
+
+            <div class="mt-4 text-center">
+              <div class="inline-flex items-center gap-1.5 chip accent-bg">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1l1.2 2.5L9 4l-2 2 .5 3L5 7.5 2.5 9 3 6 1 4l2.8-.5L5 1z" fill="currentColor"/></svg>
+                2 new PRs
+              </div>
+              <h2 class="font-display text-[28px] font-semibold leading-[1.05] mt-3 tracking-tight">
+                Workout <br/>
+                <span class="bg-[color:var(--accent)] px-1 rounded">complete.</span>
+              </h2>
+              <p class="text-[12px] text-[color:var(--muted)] mt-2">Push A · 58 min · 6 exercises · 22 sets</p>
+            </div>
+
+            <div class="mt-5 grid grid-cols-3 gap-2">
+              <div class="rounded-2xl ink-bg p-3 text-white">
+                <div class="text-[9px] font-semibold tracking-wider uppercase" style="color:var(--accent)">Volume</div>
+                <div class="font-display text-lg font-semibold mt-1">8,420<span class="text-[10px] text-white/60 ml-0.5">kg</span></div>
+                <div class="text-[10px] text-white/60 mt-0.5">+6.2% vs last</div>
+              </div>
+              <div class="rounded-2xl ring-ink p-3">
+                <div class="label-up">Top set</div>
+                <div class="font-display text-lg font-semibold mt-1">100<span class="text-[10px] text-[color:var(--muted)] ml-0.5">×5</span></div>
+                <div class="text-[10px] text-[color:var(--muted)] mt-0.5">Bench Press</div>
+              </div>
+              <div class="rounded-2xl ring-ink p-3">
+                <div class="label-up">Avg RPE</div>
+                <div class="font-display text-lg font-semibold mt-1">7.8</div>
+                <div class="text-[10px] text-[color:var(--muted)] mt-0.5">In range</div>
+              </div>
+            </div>
+
+            <div class="mt-4 rounded-2xl ring-ink p-3">
+              <div class="flex items-center justify-between">
+                <span class="label-up">Personal records</span>
+                <span class="text-[10px] text-[color:var(--muted)]">2</span>
+              </div>
+              <div class="mt-2 space-y-2">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg accent-bg flex items-center justify-center text-[11px] font-bold">5RM</span>
+                    <div>
+                      <div class="text-[13px] font-semibold">Bench Press</div>
+                      <div class="text-[10px] text-[color:var(--muted)]">was 97.5kg</div>
+                    </div>
+                  </div>
+                  <div class="font-display font-semibold">100<span class="text-[10px] text-[color:var(--muted)] ml-0.5">kg</span></div>
+                </div>
+                <div class="divider"></div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg accent-bg flex items-center justify-center text-[11px] font-bold">Vol</span>
+                    <div>
+                      <div class="text-[13px] font-semibold">Incline DB Press</div>
+                      <div class="text-[10px] text-[color:var(--muted)]">877kg total</div>
+                    </div>
+                  </div>
+                  <div class="font-display font-semibold">+11%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 rounded-2xl ring-ink p-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="label-up">Bench Press · e1RM</div>
+                  <div class="font-display text-lg font-semibold mt-0.5">116.7<span class="text-[11px] text-[color:var(--muted)] ml-0.5">kg</span> <span class="text-[11px] font-medium text-emerald-600 ml-1">▲ 3.2</span></div>
+                </div>
+                <span class="text-[10px] text-[color:var(--muted)]">last 8</span>
+              </div>
+              <svg viewBox="0 0 280 70" class="mt-1 w-full" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#C6FF3D" stop-opacity="0.55"/>
+                    <stop offset="100%" stop-color="#C6FF3D" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M2 55 L40 48 L75 50 L110 40 L145 36 L180 30 L215 24 L260 12" fill="none" stroke="#0B0F0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 55 L40 48 L75 50 L110 40 L145 36 L180 30 L215 24 L260 12 L260 70 L2 70 Z" fill="url(#g)" stroke="none"/>
+                <circle cx="260" cy="12" r="3.5" fill="#0B0F0A"/>
+                <circle cx="260" cy="12" r="6" fill="#0B0F0A" fill-opacity="0.15"/>
+              </svg>
+            </div>
+
+            <div class="mt-3 rounded-2xl p-3" style="background:var(--ink); color:#fff">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-[9px] font-semibold tracking-wider uppercase" style="color:var(--accent)">Next · Friday</div>
+                  <div class="font-display font-semibold mt-0.5 text-[14px]">Pull A — Back & Biceps</div>
+                </div>
+                <span class="text-[11px] text-white/60">in 2 days</span>
+              </div>
+            </div>
+
+            <div class="mt-auto pt-3 grid grid-cols-2 gap-2">
+              <button class="rounded-2xl ring-ink py-3 font-semibold text-[13px] bg-white">Share</button>
+              <button class="rounded-2xl accent-bg py-3 font-semibold text-[13px]">Done</button>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <div class="font-display font-semibold">3 · Summary</div>
+          <div class="text-[12px] text-[color:var(--muted)]">PRs, volume delta, e1RM trend.</div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="mt-20 flex items-center justify-between text-[12px] text-[color:var(--muted)] flex-wrap gap-2">
+      <span>GymApp · interactive mockup · 2026-05-15</span>
+      <span>Designed mobile-first · 380×780 viewport</span>
+    </footer>
+  </main>
+
+</body>
+</html>
