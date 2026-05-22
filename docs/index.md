@@ -55,8 +55,8 @@ Plus Marketing, Engagement, Analytics, and Release leads ready to be filled in. 
 
 | | |
 |---|---|
-| ![Pipeline](assets/screenshots/04-cockpit-pipeline.png) | ![Preview](assets/screenshots/05-cockpit-preview.png) |
-| **Pipeline** — Idea → Planning → Designing → Building → Testing → Iterating | **Preview** — live `preview/index.html` + quick-change chips |
+| ![Pipeline](assets/screenshots/04-cockpit-pipeline.png) | ![Files](assets/screenshots/09-cockpit-files.png) |
+| **Pipeline** — Idea → Planning → Designing → Building → Testing → Iterating | **Files** — every artifact the org wrote: PRD, mockup, code, plans |
 | ![Activity](assets/screenshots/06-cockpit-activity.png) | ![Buddy](assets/screenshots/08-buddy-chat.png) |
 | **Activity feed** — every action every agent takes | **Buddy** — your always-on advisor, streams token-by-token |
 

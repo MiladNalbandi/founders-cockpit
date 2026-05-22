@@ -105,8 +105,8 @@ celery -A cockpit worker -l info
 | **1. Register** — local account, no email verification | **2. Settings** — paste your Anthropic key (encrypted at rest) |
 | ![Your startups](docs/assets/screenshots/03-projects-empty.png) | ![Pipeline](docs/assets/screenshots/04-cockpit-pipeline.png) |
 | **3. Your startups** — one card per idea | **4. Pipeline** — Idea → Planning → Designing → Building → Testing → Iterating |
-| ![Preview](docs/assets/screenshots/05-cockpit-preview.png) | ![Activity](docs/assets/screenshots/06-cockpit-activity.png) |
-| **5. Preview** — live `preview/index.html` + quick-change chips | **6. Activity feed** — every action every agent takes |
+| ![Files](docs/assets/screenshots/09-cockpit-files.png) | ![Activity](docs/assets/screenshots/06-cockpit-activity.png) |
+| **5. Files** — every artifact the org wrote: PRD, mockup, code, plans | **6. Activity feed** — every action every agent takes |
 
 Full walkthrough on the [**tutorial page**](https://miladnalbandi.github.io/founders-cockpit/tutorial.html).
 
