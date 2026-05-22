@@ -1,25 +1,70 @@
 """Django settings for the Founder's Cockpit backend."""
 from __future__ import annotations
 
+import json
 import os
+import secrets
 from datetime import timedelta
 from pathlib import Path
 
+from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-insecure-change-me")
 DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
 
+# --- Secret management -------------------------------------------------------
+# In production (DEBUG=False): both DJANGO_SECRET_KEY and FERNET_KEY MUST be
+# set via env / .env. We refuse to start otherwise.
+#
+# In development (DEBUG=True): if a key is missing we auto-generate one and
+# persist it to backend/.dev_secrets.json (gitignored) so subsequent restarts
+# keep the same key — which means existing encrypted data still decrypts.
+# This file is NEVER committed and the generated values are unique per checkout.
+
+_DEV_SECRETS_PATH = BASE_DIR / ".dev_secrets.json"
+
+
+def _load_or_create_dev_secrets() -> dict[str, str]:
+    if _DEV_SECRETS_PATH.exists():
+        try:
+            return json.loads(_DEV_SECRETS_PATH.read_text())
+        except (OSError, json.JSONDecodeError):
+            pass  # fall through and regenerate
+    fresh = {
+        "DJANGO_SECRET_KEY": secrets.token_urlsafe(64),
+        "FERNET_KEY": Fernet.generate_key().decode("ascii"),
+    }
+    _DEV_SECRETS_PATH.write_text(json.dumps(fresh, indent=2))
+    try:
+        _DEV_SECRETS_PATH.chmod(0o600)
+    except OSError:
+        pass
+    return fresh
+
+
+def _resolve_secret(name: str) -> str:
+    value = os.environ.get(name)
+    if value:
+        return value
+    if DEBUG:
+        return _load_or_create_dev_secrets()[name]
+    raise RuntimeError(
+        f"{name} is not set. Refusing to start in production without it. "
+        "Set it in the environment or a .env file. "
+        "Generate one with: "
+        "python -c \"from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())\""
+    )
+
+
+SECRET_KEY = _resolve_secret("DJANGO_SECRET_KEY")
+
 # Fernet key used to encrypt per-user Anthropic API keys at rest.
 # Generate one with: python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
-FERNET_KEY = os.environ.get(
-    "FERNET_KEY",
-    "TZ8Q4hYxnQ2BAfvKkExrUWiq5VzPmJP3uzZHcgkmTjA=",  # dev-only fallback
-)
+FERNET_KEY = _resolve_secret("FERNET_KEY")
 
 INSTALLED_APPS = [
     "daphne",

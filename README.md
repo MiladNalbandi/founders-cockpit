@@ -134,7 +134,7 @@ desktop/
 
 ## Security notes
 
-- Anthropic keys are encrypted at rest with Fernet (`apps/accounts/crypto.py`); set a real `FERNET_KEY` in production.
+- Anthropic keys are encrypted at rest with Fernet (`apps/accounts/crypto.py`). In **production (`DJANGO_DEBUG=0`)** the server refuses to start unless `FERNET_KEY` and `DJANGO_SECRET_KEY` are explicitly set. In **dev (`DJANGO_DEBUG=1`)** both are auto-generated on first boot and persisted to `backend/.dev_secrets.json` (gitignored) so subsequent restarts can still decrypt existing user keys.
 - All filesystem tools resolve paths against the project workspace and reject any traversal.
 - `shell_exec` has a tight allowlist (`python`, `pip`, `uv`, `npm`, `node`, `git`, …); even within that, every command runs in the project workspace with a 60s timeout.
 - Agent runs have hard caps: max iterations, max tokens per turn, total timeout (see `cockpit/settings.py`).

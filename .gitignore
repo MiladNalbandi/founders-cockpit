@@ -11,6 +11,7 @@ __pycache__/
 backend/staticfiles/
 backend/workspaces/
 backend/.env
+backend/.dev_secrets.json
 
 # Node / Electron / Vite
 node_modules/
