@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "vite",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd desktop && exec node_modules/.bin/vite --host 0.0.0.0 --port 5184"],
+      "port": 5184
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+*.sqlite3
+*.sqlite3-journal
+
+# Django
+backend/staticfiles/
+backend/workspaces/
+backend/.env
+
+# Node / Electron / Vite
+node_modules/
+desktop/dist/
+desktop/dist-electron/
+desktop/.env
+*.log
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Dev tooling caches & local-only configs
+.vite/
+.serena/
+.claude/settings.local.json
+.claude/launch.json

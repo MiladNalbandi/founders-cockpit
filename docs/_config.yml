@@ -1,0 +1,5 @@
+theme: jekyll-theme-cayman
+title: Founder's Cockpit
+description: AI-agent cockpit for solo founders — Django + Electron, powered by Claude
+show_downloads: false
+google_analytics:

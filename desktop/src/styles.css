@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium transition
+      bg-ink-900 text-ink-50 hover:bg-ink-700 disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium transition
+      text-ink-700 hover:bg-ink-100;
+  }
+  .card {
+    @apply rounded-lg border border-ink-200 bg-white;
+  }
+  .input {
+    @apply w-full rounded-md border border-ink-200 bg-white px-3 py-2 text-sm
+      focus:outline-none focus:ring-2 focus:ring-accent;
+  }
+  .status-pulse {
+    @apply relative;
+  }
+  .status-pulse::after {
+    content: "";
+    @apply absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full;
+  }
+}
+
+/* Status dot colors (kept outside Tailwind cycles for clarity) */
+.dot-idle { background: #b6b6c0; }
+.dot-thinking { background: #f5b942; box-shadow: 0 0 0 3px rgba(245,185,66,.2); animation: pulse 1.4s infinite; }
+.dot-working { background: #2dd4bf; box-shadow: 0 0 0 3px rgba(45,212,191,.25); animation: pulse 1s infinite; }
+.dot-done { background: #4ade80; }
+.dot-error { background: #ef4444; }
+.dot-blocked { background: #a78bfa; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
